@@ -1,15 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "ArvoreAVL.h"
 
-// Definição da estrutura de um nó da árvore AVL
-typedef struct tipo_no {
-    int chave;   // Valor armazenado no nó
-    int fb;      // Fator de balanceamento do nó
-    int h;       // Altura do nó
-    struct tipo_no *esq; // Ponteiro para o filho esquerdo
-    struct tipo_no *dir; // Ponteiro para o filho direito
-} tipo_no;
+
+// Contador global para rotações
+static int contador_rotacoes = 0;
 
 // Função que retorna o maior de dois inteiros
 int maior(int x, int y) {
@@ -38,6 +31,9 @@ tipo_no *Rotacao_direita(tipo_no *pt) {
     pt->h = maior(altura_no(pt->esq), altura_no(pt->dir)) + 1;
     ptu->h = maior(altura_no(ptu->esq), pt->h) + 1;
     return ptu; // ptu se torna a nova raiz
+    //Incrementar o contador de rotações
+    contador_rotacoes++;
+    return ptu; // ptu se torna a nova raiz
 }
 
 // Função para realizar rotação simples à esquerda
@@ -48,18 +44,24 @@ tipo_no *Rotacao_esquerda(tipo_no *pt) {
     // Atualizar as alturas após a rotação
     pt->h = maior(altura_no(pt->esq), altura_no(pt->dir)) + 1;
     ptu->h = maior(altura_no(ptu->dir), pt->h) + 1;
+    // Incrementar o contador de rotações
+    contador_rotacoes++;
     return ptu; // ptu se torna a nova raiz
 }
 
 // Função para realizar rotação dupla à direita
 tipo_no *RotacaoDup_direita(tipo_no *pt) {
     pt->esq = Rotacao_esquerda(pt->esq); // Primeiro faz rotação à esquerda no filho esquerdo
-    return Rotacao_direita(pt);          // Depois faz rotação à direita no próprio pt
+    // Incrementar o contador de rotações
+    contador_rotacoes++;
+    return Rotacao_direita(pt);// Depois faz rotação à direita no próprio pt
 }
 
 // Função para realizar rotação dupla à esquerda
 tipo_no *RotacaoDup_esquerda(tipo_no *pt) {
     pt->dir = Rotacao_direita(pt->dir); // Primeiro faz rotação à direita no filho direito
+    // Incrementar o contador de rotações
+    contador_rotacoes++;
     return Rotacao_esquerda(pt);        // Depois faz rotação à esquerda no próprio pt
 }
 
@@ -112,33 +114,36 @@ tipo_no *insere(tipo_no *no, int chave) {
 }
 
 // Função para imprimir a árvore com indentação
-void imprime(tipo_no *no, int tab) {
+void imprime(tipo_no *no) {
     if (no != NULL) {
-        tab += 10; // Aumenta o nível de indentação
-        imprime(no->dir, tab); // Imprime a subárvore direita
-        printf("\n");
-        for (int i = 10; i < tab; i++) printf(" ");
-        printf("%d (%d)\n", no->chave, no->h); // Imprime o valor do nó e sua altura
-        imprime(no->esq, tab + 2); // Imprime a subárvore esquerda
+        // Imprime a subárvore direita
+        imprime(no->dir);
+
+        // Imprime o valor do nó e sua altura
+        printf("%d h -> (%d)\n", no->chave, no->h);
+        
+        // Imprime a subárvore esquerda
+        imprime(no->esq);
     }
 }
 
-int main() {
-    tipo_no *arv = NULL;
+// Função para ler números de um arquivo e inseri-los na árvore AVL
+tipo_no* ler_e_inserir(const char *nome_arquivo, tipo_no *raiz) {
+    FILE *arquivo = fopen(nome_arquivo, "r"); // Abre o arquivo para leitura
+    if (arquivo == NULL) {
+        fprintf(stderr, "Erro ao abrir o arquivo %s.\n", nome_arquivo);
+        return raiz; // Retorna a árvore sem alterações se o arquivo não puder ser aberto
+    }
 
-    // Inserções na árvore AVL
-    arv = insere(arv, 50);
-    arv = insere(arv, 10);
-    arv = insere(arv, 20);
-    arv = insere(arv, 30);
-    arv = insere(arv, 60);
-    arv = insere(arv, 70);
-    arv = insere(arv, 90);
-    arv = insere(arv, 55);
-    arv = insere(arv, 51);
+    int numero;
+    while (fscanf(arquivo, "%d", &numero) == 1) { // Lê números do arquivo até o final
+        raiz = insere(raiz, numero); // Insere o número na árvore AVL
+    }
 
-    // Impressão da árvore
-    imprime(arv, 0);
+    fclose(arquivo); // Fecha o arquivo após a leitura
+    return raiz; // Retorna a árvore com os números inseridos
+}
 
-    return 0;
+int obter_contador_rotacoes() {
+    return contador_rotacoes;
 }
