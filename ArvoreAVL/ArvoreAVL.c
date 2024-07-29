@@ -1,4 +1,5 @@
 #include "ArvoreAVL.h"
+#include <unistd.h> 
 
 
 // Contador global para rotações
@@ -136,6 +137,7 @@ tipo_no* ler_e_inserir(const char *nome_arquivo, tipo_no *raiz) {
     }
 
     int numero;
+
     while (fscanf(arquivo, "%d", &numero) == 1) { // Lê números do arquivo até o final
         raiz = insere(raiz, numero); // Insere o número na árvore AVL
     }
