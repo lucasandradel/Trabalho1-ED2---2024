@@ -60,7 +60,7 @@ void selecionar_amostra(int *chaves, int *amostra, int total, int amostra_size) 
         int j = rand() % (i + 1); // Gera um índice aleatório
         int temp = chaves[i]; // Troca o elemento na posição i com o elemento na posição j
         chaves[i] = chaves[j];
-        chaves[j] = temp;
+        chaves[j] = temp;//
     }
 
     // Seleciona os primeiros amostra_size elementos do array embaralhado para a amostra
