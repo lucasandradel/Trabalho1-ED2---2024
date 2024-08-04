@@ -3,11 +3,14 @@
 #include <stdlib.h>
 #include <time.h>
 
+
 // Função que gera números aleatórios e os salva em um arquivo
 void gerar_numeros(int n, const char *nome_arquivo) {
+    srand(time(NULL));
+
     // Cria um espaço na memória para armazenar os números
     int *numeros = (int*)malloc(n * sizeof(int));
-    if (numeros == NULL) {
+    if (numeros == NULL) { //verifica se o endereço de memória é igual a nulo, ou seja, se for, não está alocado 
         // Se não conseguiu criar o espaço na memória, mostra uma mensagem de erro
         fprintf(stderr, "Erro ao alocar memória.\n");
         exit(EXIT_FAILURE);
@@ -53,34 +56,4 @@ void gerar_numeros(int n, const char *nome_arquivo) {
     // Fecha o arquivo e libera o espaço na memória
     fclose(arquivo);
     free(numeros);
-}
-
-// Função principal que executa o programa
-int main() {
-    // Inicializa o gerador de números aleatórios com a hora atual
-    srand(time(NULL));
-
-    // Define os tamanhos dos arquivos e os nomes dos arquivos a serem gerados
-    int tamanhos[] = {5000, 5000, 5000, 20000, 20000, 20000};
-    // Lista de nomes de arquivos onde os números serão salvos
-    const char *nomes_arquivos[] = {
-        "arquivo_5000_1.txt",
-        "arquivo_5000_2.txt",
-        "arquivo_5000_3.txt",
-        "arquivo_20000_1.txt",
-        "arquivo_20000_2.txt",
-        "arquivo_20000_3.txt"
-    };
-
-    // Loop para gerar os arquivos com números aleatórios
-    for (int i = 0; i < 6; i++) {
-        // Chama a função gerar_numeros para criar o arquivo com números aleatórios
-        gerar_numeros(tamanhos[i], nomes_arquivos[i]);
-    }
-
-    // Mensagem para indicar que os arquivos foram gerados com sucesso
-    printf("Arquivos gerados com sucesso.\n");
-
-    // Retorna 0 para indicar que o programa terminou sem erros
-    return EXIT_SUCCESS;
 }

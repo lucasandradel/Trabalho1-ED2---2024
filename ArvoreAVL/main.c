@@ -1,99 +1,223 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
+#include <string.h>
 #include "ArvoreAVL.h"
 #include "Busca.h"
-#include <unistd.h>  // Biblioteca para a função sleep, que faz o programa "dormir" por alguns segundos
+#include "Geracao.h"
+
+// Variáveis globais para armazenar os resultados e o nome do arquivo inserido
+Resultado resultado_atual;
+char arquivo_inserido[256] = "";
 
 int main() {
     tipo_no *arvore = NULL; // Inicializa a árvore AVL como vazia
+    int opcao; // Opção escolhida pelo usuário no menu
+    char nome_arquivo[256]; // Buffer para o nome do arquivo escolhido pelo usuário
 
-    // Nome do arquivo de entrada 
-    const char *nome_arquivo = "arquivo_5000_1.txt";
-    
-    // Pausa antes de começar a inserção
-    printf("*************************** Iniciando a inserção. O programa fará uma pausa de 3 segundos... ***************************\n\n");
-    sleep(3); // Pausa por 5 segundos
-    
-    // Chama a função para ler os números do arquivo e inseri-los na árvore AVL
-    arvore = ler_e_inserir(nome_arquivo, arvore);
+    while (1) {
+        // Mostra o menu de opções
+        printf("\nEscolha uma opção:\n");
+        printf("1. Gerar arquivos de saída\n");
+        printf("2. Inserir na árvore\n");
+        printf("3. Buscar amostra\n");
+        printf("4. Gerar arquivo de saída para amostra\n");
+        printf("5. Ver resultados\n");
+        printf("6. Sair\n");
+        printf("\nDigite a opção desejada: ");
+        scanf("%d", &opcao);
 
-    // Faz uma pausa de 2 segundos após a inserção
-    printf("\n *************************** Inserção concluída. O programa fará uma pausa de 2 segundos... ***************************\n");
-    sleep(2);
+        switch (opcao) {
+            case 1:
+                // Gerar arquivos de saída com números aleatórios
+                printf("\n\t******************** Gerando arquivos de saída ********************...\n");
+                gerar_numeros(5000, "arquivo_5000_1.txt");
+                gerar_numeros(5000, "arquivo_5000_2.txt");
+                gerar_numeros(5000, "arquivo_5000_3.txt");
+                gerar_numeros(20000, "arquivo_20000_1.txt");
+                gerar_numeros(20000, "arquivo_20000_2.txt");
+                gerar_numeros(20000, "arquivo_20000_3.txt");
+                printf("\nArquivos gerados com sucesso.\n");
+                break;
 
-    // Imprime a árvore AVL após a inserção dos números. Isso mostra todos os números na árvore.
-    printf("\n ***************************Árvore AVL após inserção dos números: ***************************\n");
-    imprime(arvore);
+            case 2:
 
-    // Faz outra pausa de 2 segundos
-    printf("\n*************************** Preparando para a busca. O programa fará uma pausa de 2 segundos... ***************************\n");
-    sleep(2);
+                // Liberar a árvore atual antes de inserir novos dados
+                if (arvore != NULL) {
+                    liberar_arvore(arvore);
+                    arvore = NULL;
+                    //printf("Há algo aqui");
+                }
+                // Inserir os números de um arquivo na árvore AVL
+                printf("\nEscolha um arquivo para inserir na árvore:\n");
+                printf("1. arquivo_5000_1.txt\n");
+                printf("2. arquivo_5000_2.txt\n");
+                printf("3. arquivo_5000_3.txt\n");
+                printf("4. arquivo_20000_1.txt\n");
+                printf("5. arquivo_20000_2.txt\n");
+                printf("6. arquivo_20000_3.txt\n");
+                printf("\nDigite o número do arquivo desejado: ");
+                int escolha_arquivo;
+                scanf("%d", &escolha_arquivo);
 
-    // Abre o arquivo para ler os números
-    FILE *arquivo = fopen(nome_arquivo, "r");
-    if (arquivo == NULL) {
-        // Se não conseguir abrir o arquivo, mostra uma mensagem de erro e encerra o programa
-        fprintf(stderr, "Erro ao abrir o arquivo %s.\n", nome_arquivo);
-        return EXIT_FAILURE; // Encerra o programa com um código de erro
+                // Define o nome do arquivo com base na escolha do usuário
+                switch (escolha_arquivo) {
+                    case 1: strcpy(nome_arquivo, "arquivo_5000_1.txt"); break;
+                    case 2: strcpy(nome_arquivo, "arquivo_5000_2.txt"); break;
+                    case 3: strcpy(nome_arquivo, "arquivo_5000_3.txt"); break;
+                    case 4: strcpy(nome_arquivo, "arquivo_20000_1.txt"); break;
+                    case 5: strcpy(nome_arquivo, "arquivo_20000_2.txt"); break;
+                    case 6: strcpy(nome_arquivo, "arquivo_20000_3.txt"); break;
+                    default:
+                        printf("\n\t******************** Opção inválida. Retornando ao menu. ********************\n");
+                        continue;
+                }
+
+                printf("*************************** Iniciando a inserção. O programa fará uma pausa de 3 segundos... ***************************\n\n");
+                sleep(3);
+
+                // Chama a função para ler os números do arquivo e inseri-los na árvore AVL
+                arvore = ler_e_inserir(nome_arquivo, arvore);
+
+                // Armazena o nome do arquivo inserido
+                strcpy(arquivo_inserido, nome_arquivo);
+
+                printf("\n *************************** Inserção concluída. O programa fará uma pausa de 2 segundos... ***************************\n");
+                sleep(2);
+
+                // Imprime a árvore AVL após a inserção dos números
+                printf("\n *************************** Árvore AVL após inserção dos números: ***************************\n");
+                imprime(arvore);
+
+                break;
+
+            case 3:
+                // Buscar uma amostra de números na árvore AVL
+                printf("\nEscolha um arquivo para buscar amostra:\n");
+                printf("1. arquivo_5000_1.txt\n");
+                printf("2. arquivo_5000_2.txt\n");
+                printf("3. arquivo_5000_3.txt\n");
+                printf("4. arquivo_20000_1.txt\n");
+                printf("5. arquivo_20000_2.txt\n");
+                printf("6. arquivo_20000_3.txt\n");
+                printf("\nDigite o número do arquivo desejado: ");
+                scanf("%d", &escolha_arquivo);
+
+                // Define o nome do arquivo com base na escolha do usuário
+                switch (escolha_arquivo) {
+                    case 1: strcpy(nome_arquivo, "arquivo_5000_1.txt"); break;
+                    case 2: strcpy(nome_arquivo, "arquivo_5000_2.txt"); break;
+                    case 3: strcpy(nome_arquivo, "arquivo_5000_3.txt"); break;
+                    case 4: strcpy(nome_arquivo, "arquivo_20000_1.txt"); break;
+                    case 5: strcpy(nome_arquivo, "arquivo_20000_2.txt"); break;
+                    case 6: strcpy(nome_arquivo, "arquivo_20000_3.txt"); break;
+                    default:
+                        printf("\n\t******************** Opção inválida. Retornando ao menu. ********************\n");
+                        continue;
+                }
+
+                // Verifica se o arquivo escolhido é o mesmo que foi inserido na árvore
+                if (strcmp(nome_arquivo, arquivo_inserido) != 0) {
+                    printf("O arquivo escolhido para a busca não corresponde ao arquivo inserido na árvore.\n");
+                    continue;
+                }
+
+                printf("\n*************************** Preparando para a busca. O programa fará uma pausa de 2 segundos... ***************************\n");
+                sleep(2);
+
+                int tamanho_amostra;
+                // Lê os números do arquivo e seleciona uma amostra aleatória
+                int *amostra = ler_numeros_e_selecionar_amostra(nome_arquivo, &tamanho_amostra);
+                if (amostra == NULL) {
+                    return EXIT_FAILURE;
+                }
+
+                // Nome do arquivo onde a amostra será salva
+                const char *nome_arquivo_amostra = "amostra.txt";
+
+                // Mostra os valores da amostra e salva em um arquivo
+                mostrar_amostra_e_salvar(amostra, tamanho_amostra, nome_arquivo_amostra);
+
+                printf("\n*************************** Iniciando a busca. O programa fará uma pausa de 2 segundos... ***************************\n");
+                sleep(2);
+
+                // Inicia a contagem do tempo de busca
+                clock_t inicio_busca = clock();
+                // Realiza a busca na árvore AVL usando a amostra e avalia o desempenho
+                int num_comparacoes = busca_e_avaliar(arvore, amostra, tamanho_amostra);
+                clock_t fim_busca = clock();
+                // Calcula o tempo de busca
+                double tempo_busca = (double)(fim_busca - inicio_busca) / CLOCKS_PER_SEC;
+
+                // Preenche os resultados atuais
+                strcpy(resultado_atual.nome_arquivo, nome_arquivo);
+                resultado_atual.tempo_busca = tempo_busca;
+                resultado_atual.num_comparacoes = num_comparacoes;
+                resultado_atual.num_rotacoes = obter_contador_rotacoes();
+                resultado_atual.altura_arvore = altura_no(arvore);
+
+                printf("\nNúmero total de rotações: %d\n", resultado_atual.num_rotacoes);
+                printf("Altura total da árvore: %d\n", resultado_atual.altura_arvore);
+
+                // Libera a memória alocada para a amostra
+                free(amostra);
+                break;
+
+            case 4:
+                // Gerar arquivo de saída para amostra
+                printf("\nEscolha um arquivo para gerar saída da amostra:\n");
+                printf("1. arquivo_5000_1.txt\n");
+                printf("2. arquivo_5000_2.txt\n");
+                printf("3. arquivo_5000_3.txt\n");
+                printf("4. arquivo_20000_1.txt\n");
+                printf("5. arquivo_20000_2.txt\n");
+                printf("6. arquivo_20000_3.txt\n");
+                printf("\nDigite o número do arquivo desejado: ");
+                scanf("%d", &escolha_arquivo);
+
+                // Define o nome do arquivo com base na escolha do usuário
+                switch (escolha_arquivo) {
+                    case 1: strcpy(nome_arquivo, "arquivo_5000_1.txt"); break;
+                    case 2: strcpy(nome_arquivo, "arquivo_5000_2.txt"); break;
+                    case 3: strcpy(nome_arquivo, "arquivo_5000_3.txt"); break;
+                    case 4: strcpy(nome_arquivo, "arquivo_20000_1.txt"); break;
+                    case 5: strcpy(nome_arquivo, "arquivo_20000_2.txt"); break;
+                    case 6: strcpy(nome_arquivo, "arquivo_20000_3.txt"); break;
+                    default:
+                        printf("\n\t******************** Opção inválida. Retornando ao menu. ********************\n");
+                        continue;
+                }
+
+                int tamanho_amostra_saida;
+                // Lê os números do arquivo e seleciona uma amostra aleatória
+                int *amostra_saida = ler_numeros_e_selecionar_amostra(nome_arquivo, &tamanho_amostra_saida);
+                if (amostra_saida == NULL) {
+                    return EXIT_FAILURE;
+                }
+
+                // Nome do arquivo onde a amostra será salva
+                const char *nome_arquivo_amostra_saida = "amostra_saida.txt";
+                // Mostra os valores da amostra e salva em um arquivo
+                mostrar_amostra_e_salvar(amostra_saida, tamanho_amostra_saida, nome_arquivo_amostra_saida);
+
+                // Libera a memória alocada para a amostra
+                free(amostra_saida);
+                break;
+
+            case 5:
+                // Ver resultados
+                mostrar_resultados(resultado_atual);
+                break;
+
+            case 6:
+                // Sair do programa
+                printf("Saindo do programa.\n");
+                return EXIT_SUCCESS;
+
+            default:
+                printf("Opção inválida. Tente novamente.\n");
+                break;
+        }
     }
-
-    int total_numeros = 0;
-    int numero;
-
-    // Conta quantos números estão no arquivo
-    while (fscanf(arquivo, "%d", &numero) == 1) {
-        total_numeros++; // Conta cada número encontrado
-    }
-    rewind(arquivo); // Volta para o começo do arquivo para ler os números novamente
-
-    // Cria um espaço na memória para guardar todos os números do arquivo
-    int *numeros = (int*)malloc(total_numeros * sizeof(int));
-    if (numeros == NULL) {
-        // Se não conseguir alocar memória, mostra uma mensagem de erro e encerra o programa
-        fprintf(stderr, "Erro ao alocar memória.\n");
-        return EXIT_FAILURE;
-    }
-
-    // Lê todos os números do arquivo e os guarda no array 'numeros'
-    int i = 0;
-    while (fscanf(arquivo, "%d", &numero) == 1) {
-        numeros[i++] = numero;
-    }
-    fclose(arquivo); // Fecha o arquivo depois de ler todos os números
-
-    // Calcula 20% do total de números para a amostra
-    int tamanho_amostra = total_numeros / 5;
-    // Cria um espaço na memória para guardar a amostra
-    int *amostra = (int*)malloc(tamanho_amostra * sizeof(int));
-    if (amostra == NULL) {
-        // Se não conseguir alocar memória para a amostra, mostra uma mensagem de erro e encerra o programa
-        fprintf(stderr, "Erro ao alocar memória para a amostra.\n");
-        free(numeros); // Libera a memória usada para os números
-        return EXIT_FAILURE;
-    }
-
-    // Função para selecionar aleatoriamente uma amostra dos números
-    selecionar_amostra(numeros, amostra, total_numeros, tamanho_amostra);
-
-    // Mostra os números selecionados
-    mostrar_amostra(amostra, tamanho_amostra);
-
-    // Pausa antes de começar a busca
-    printf("\n*************************** Iniciando a busca. O programa fará uma pausa de 2 segundos... ***************************\n");
-    sleep(2);
-
-    // Realiza a busca para cada número da amostra e avalia o desempenho
-    busca_e_avaliar(arvore, amostra, tamanho_amostra);
-
-    // Mostra o número total de rotações realizadas na árvore AVL
-    printf("\nNúmero total de rotações: %d\n", obter_contador_rotacoes());
-    // Mostra a altura total da árvore AVL
-    printf("Altura total da árvore: %d\n", altura_no(arvore));
-
-    // Libera a memória usada para os arrays
-    free(numeros);
-    free(amostra);
-
-    return EXIT_SUCCESS; // Retorna 0 para indicar que o programa terminou com sucesso
 }

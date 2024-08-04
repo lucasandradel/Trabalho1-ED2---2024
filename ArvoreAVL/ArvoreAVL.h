@@ -25,5 +25,6 @@ tipo_no *insere(tipo_no *no, int chave);
 void imprime(tipo_no *no);
 tipo_no* ler_e_inserir(const char *nome_arquivo, tipo_no *raiz);
 int obter_contador_rotacoes();
+void liberar_arvore(tipo_no *arvore);
 
 #endif // __ARVORE_AVL_H__

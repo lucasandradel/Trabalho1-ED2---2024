@@ -149,3 +149,12 @@ tipo_no* ler_e_inserir(const char *nome_arquivo, tipo_no *raiz) {
 int obter_contador_rotacoes() {
     return contador_rotacoes;
 }
+
+// Função para liberar a árvore
+void liberar_arvore(tipo_no *arvore) {
+    if (arvore != NULL) {
+        liberar_arvore(arvore->esq);
+        liberar_arvore(arvore->dir);
+        free(arvore);
+    }
+}
