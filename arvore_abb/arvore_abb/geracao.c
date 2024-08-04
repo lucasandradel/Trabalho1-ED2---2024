@@ -1,16 +1,10 @@
-#include "Geracao.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
+#include "geracao.h"
 
 // Função que gera números aleatórios e os salva em um arquivo
 void gerar_numeros(int n, const char *nome_arquivo) {
-    srand(time(NULL));
-
     // Cria um espaço na memória para armazenar os números
     int *numeros = (int*)malloc(n * sizeof(int));
-    if (numeros == NULL) { //verifica se o endereço de memória é igual a nulo, ou seja, se for, não está alocado 
+    if (numeros == NULL) {
         // Se não conseguiu criar o espaço na memória, mostra uma mensagem de erro
         fprintf(stderr, "Erro ao alocar memória.\n");
         exit(EXIT_FAILURE);
@@ -57,3 +51,4 @@ void gerar_numeros(int n, const char *nome_arquivo) {
     fclose(arquivo);
     free(numeros);
 }
+

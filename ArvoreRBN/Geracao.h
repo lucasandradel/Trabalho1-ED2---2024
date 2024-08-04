@@ -7,6 +7,7 @@
 #include <time.h>
 
 
+
 //prototipagem de funções
 void gerar_numeros(int n, const char *nome_arquivo);
 
