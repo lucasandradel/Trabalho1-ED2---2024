@@ -38,7 +38,7 @@ int main() {
                 gerar_numeros(20000, "arquivo_20000_1.txt");
                 gerar_numeros(20000, "arquivo_20000_2.txt");
                 gerar_numeros(20000, "arquivo_20000_3.txt");
-                printf("\nArquivos gerados com sucesso.\n");
+                printf("\n\t******************** Arquivos gerados com sucesso. ********************\n");
                 break;
 
             case 2:
@@ -74,7 +74,7 @@ int main() {
                         continue;
                 }
 
-                printf("*************************** Iniciando a inserção. O programa fará uma pausa de 3 segundos... ***************************\n\n");
+                printf("*************************** Iniciando a inserção. O programa fará uma pausa de 3 segundos... A***************************\n\n");
                 sleep(3);
 
                 // Chama a função para ler os números do arquivo e inseri-los na árvore AVL
@@ -83,11 +83,12 @@ int main() {
                 // Armazena o nome do arquivo inserido
                 strcpy(arquivo_inserido, nome_arquivo);
 
-                printf("\n *************************** Inserção concluída. O programa fará uma pausa de 2 segundos... ***************************\n");
-                sleep(2);
+                printf("\n *************************** Inserção concluída. O programa fará uma pausa de 3 segundos... ***************************\n");
+                sleep(3);
 
                 // Imprime a árvore AVL após a inserção dos números
                 printf("\n *************************** Árvore AVL após inserção dos números: ***************************\n");
+                sleep(2);
                 imprime(arvore);
 
                 break;
@@ -119,7 +120,7 @@ int main() {
 
                 // Verifica se o arquivo escolhido é o mesmo que foi inserido na árvore
                 if (strcmp(nome_arquivo, arquivo_inserido) != 0) {
-                    printf("O arquivo escolhido para a busca não corresponde ao arquivo inserido na árvore.\n");
+                    printf("\nERRO !!!!!! ERRO !!!!!! ERRO !!!!!! ERRO !!!!!!! O arquivo escolhido para a busca não corresponde ao arquivo inserido na árvore. ERRO !!!!!! ERRO !!!!!! ERRO !!!!!! ERRO !!!!!!!\n");
                     continue;
                 }
 
@@ -158,7 +159,7 @@ int main() {
                 resultado_atual.altura_arvore = altura_no(arvore);
 
                 printf("\nNúmero total de rotações: %d\n", resultado_atual.num_rotacoes);
-                printf("Altura total da árvore: %d\n", resultado_atual.altura_arvore);
+                //printf("Altura total da árvore: %d\n", resultado_atual.altura_arvore);
 
                 // Libera a memória alocada para a amostra
                 free(amostra);
