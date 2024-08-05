@@ -158,7 +158,7 @@ int main() {
                 resultado_atual.num_rotacoes = obter_contador_rotacoes();
                 resultado_atual.altura_arvore = altura_no(arvore);
 
-                printf("\nNúmero total de rotações: %d\n", resultado_atual.num_rotacoes);
+                //printf("\nNúmero total de rotações: %d\n", resultado_atual.num_rotacoes);
                 //printf("Altura total da árvore: %d\n", resultado_atual.altura_arvore);
 
                 // Libera a memória alocada para a amostra

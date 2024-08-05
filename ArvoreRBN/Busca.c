@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "Busca.h"
+#include "busca.h"
 
 // Variáveis globais para contagem de comparações
 static int contador_comparacoes = 0;
@@ -30,6 +30,7 @@ tipo_no* buscar_arv(tipo_no *raiz, int chave) {
 
 // Função para buscar_arv um conjunto de chaves na árvore e medir o tempo e comparações
 int busca_e_avaliar(tipo_no *raiz, int *chaves, int num_chaves) {
+    contador_comparacoes = 0;
     clock_t inicio = clock(); // Marca o tempo de início da busca
 
     // Realiza a busca para cada chave no conjunto
@@ -43,6 +44,8 @@ int busca_e_avaliar(tipo_no *raiz, int *chaves, int num_chaves) {
     // Mostra o tempo total de busca e o número total de comparações realizadas
     printf("Tempo de busca: %f segundos\n", tempo);
     printf("Número total de comparações: %d\n", contador_comparacoes);
+    return contador_comparacoes; // Return the total number of comparisons
+
 }
 
 // Função para obter o número total de comparações realizadas
@@ -161,3 +164,40 @@ void mostrar_resultados(Resultado res) {
     printf("Número total de rotações: %d\n", res.num_rotacoes);
     printf("Altura total da árvore: %d\n", res.altura_arvore);
 }
+
+
+
+// int* ler_numeros_e_selecionar_amostra(const char* nome_arquivo, int *tamanho_amostra) {
+//     FILE* arquivo = fopen(nome_arquivo, "r");
+//     if (arquivo == NULL) {
+//         perror("Não foi possível abrir o arquivo");
+//         return NULL;
+//     }
+
+//     // Determine the number of integers in the file
+//     int count = 0;
+//     int valor;
+//     while (fscanf(arquivo, "%d", &valor) != EOF) {
+//         count++;
+//     }
+//     rewind(arquivo); // Go back to the beginning of the file
+
+//     // Allocate memory for storing numbers
+//     int* amostra = (int*)malloc(count * sizeof(int));
+//     if (amostra == NULL) {
+//         fprintf(stderr, "Erro de alocação de memória.\n");
+//         fclose(arquivo);
+//         return NULL;
+//     }
+
+//     // Read the numbers into the array
+//     int i = 0;
+//     while (fscanf(arquivo, "%d", &valor) != EOF) {
+//         amostra[i++] = valor;
+//     }
+
+//     fclose(arquivo);
+//     *tamanho_amostra = count; // Set the size of the sample
+//     return amostra;
+// }
+

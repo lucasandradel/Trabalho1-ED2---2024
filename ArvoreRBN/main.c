@@ -3,9 +3,10 @@
 #include <time.h>
 #include <unistd.h>
 #include <string.h>
-#include "arvRBN.h"
-#include "Busca.h"
-#include "Geracao.h"
+#include "arvore_rbn.h"
+#include "busca.h"
+#include "geracao.h"
+//#include "arvore_rbn.c"
 
 // Variáveis globais para armazenar os resultados e o nome do arquivo inserido
 Resultado resultado_atual;
@@ -77,7 +78,7 @@ int main() {
                 sleep(3);
 
                 // Chama a função para ler os números do arquivo e inseri-los na árvore RBN
-                arvore = ler_e_inserir(nome_arquivo, arvore, &contador_rotacoes);
+                arvore = ler_e_inserir(nome_arquivo, arvore);
 
                 // Armazena o nome do arquivo inserido
                 strcpy(arquivo_inserido, nome_arquivo);

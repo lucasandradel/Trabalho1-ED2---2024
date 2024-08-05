@@ -1,4 +1,4 @@
-#include "Geracao.h"
+#include "geracao.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

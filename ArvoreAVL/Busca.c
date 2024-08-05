@@ -36,8 +36,8 @@ int busca_e_avaliar(tipo_no *raiz, int *chaves, int num_chaves) {
     clock_t fim = clock(); // Marca o tempo de fim da busca
     double tempo = (double)(fim - inicio) / CLOCKS_PER_SEC; // Calcula o tempo decorrido
 
-    printf("Tempo de busca: %f segundos\n", tempo);
-    printf("Número total de comparações: %d\n", contador_comparacoes);
+    //printf("Tempo de busca: %f segundos\n", tempo);
+    //printf("Número total de comparações: %d\n", contador_comparacoes);
 
     return contador_comparacoes; // Retorna o número total de comparações
 }

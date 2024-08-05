@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "arvRBN.h"
+#include "arvore_rbn.h"
 
 // Contador global para rotações
 static int contador_rotacoes = 0;
@@ -17,7 +17,7 @@ tipo_no* AlocaNo(int chave) {
     return no;
 }
 
-void rotacaoesq(tipo_no **raiz, tipo_no *x, int *rotacoes) {
+void rotacaoesq(tipo_no **raiz, tipo_no *x) {
     tipo_no *y = x->dir;
     x->dir = y->esq;
     if (y->esq != NULL)
@@ -31,10 +31,10 @@ void rotacaoesq(tipo_no **raiz, tipo_no *x, int *rotacoes) {
         x->pai->dir = y;
     y->esq = x;
     x->pai = y;
-    (*rotacoes)++;
+    contador_rotacoes++;
 }
 
-void rotacaodir(tipo_no **raiz, tipo_no *y, int *rotacoes) {
+void rotacaodir(tipo_no **raiz, tipo_no *y) {
     tipo_no *x = y->esq;
     y->esq = x->dir;
     if (x->dir != NULL)
@@ -48,10 +48,10 @@ void rotacaodir(tipo_no **raiz, tipo_no *y, int *rotacoes) {
         y->pai->esq = x;
     x->dir = y;
     y->pai = x;
-    (*rotacoes)++;
+    contador_rotacoes++;
 }
 
-void corrigirInsercao(tipo_no **raiz, tipo_no *z, int *rotacoes) {
+void corrigirInsercao(tipo_no **raiz, tipo_no *z) {
     while (z != *raiz && z->pai->cor == VERMELHO) {
         if (z->pai == z->pai->pai->esq) {
             tipo_no *y = z->pai->pai->dir;
@@ -63,11 +63,11 @@ void corrigirInsercao(tipo_no **raiz, tipo_no *z, int *rotacoes) {
             } else {
                 if (z == z->pai->dir) {
                     z = z->pai;
-                    rotacaoesq(raiz, z, rotacoes);
+                    rotacaoesq(raiz, z);
                 }
                 z->pai->cor = PRETO;
                 z->pai->pai->cor = VERMELHO;
-                rotacaodir(raiz, z->pai->pai, rotacoes);
+                rotacaodir(raiz, z->pai->pai);
             }
         } else {
             tipo_no *y = z->pai->pai->esq;
@@ -79,18 +79,18 @@ void corrigirInsercao(tipo_no **raiz, tipo_no *z, int *rotacoes) {
             } else {
                 if (z == z->pai->esq) {
                     z = z->pai;
-                    rotacaodir(raiz, z, rotacoes);
+                    rotacaodir(raiz, z);
                 }
                 z->pai->cor = PRETO;
                 z->pai->pai->cor = VERMELHO;
-                rotacaoesq(raiz, z->pai->pai, rotacoes);
+                rotacaoesq(raiz, z->pai->pai);
             }
         }
     }
     (*raiz)->cor = PRETO;
 }
 
-void inserir(tipo_no **raiz, int chave, int *rotacoes) {
+void inserir(tipo_no **raiz, int chave) {
     tipo_no *z = AlocaNo(chave);
     tipo_no *y = NULL;
     tipo_no *x = *raiz;
@@ -112,10 +112,10 @@ void inserir(tipo_no **raiz, int chave, int *rotacoes) {
 
     z->esq = z->dir = NULL;
     z->cor = VERMELHO;
-    corrigirInsercao(raiz, z, rotacoes);
+    corrigirInsercao(raiz, z);
 }
 
-tipo_no* ler_e_inserir(const char* nome_arquivo, tipo_no* arvore, int* contador_rotacoes) {
+tipo_no* ler_e_inserir(const char* nome_arquivo, tipo_no* arvore) {
     FILE* arquivo = fopen(nome_arquivo, "r");
     if (arquivo == NULL) {
         perror("Não foi possível abrir o arquivo");
@@ -124,7 +124,7 @@ tipo_no* ler_e_inserir(const char* nome_arquivo, tipo_no* arvore, int* contador_
 
     int valor;
     while (fscanf(arquivo, "%d", &valor) != EOF) {
-        inserir(&arvore, valor, contador_rotacoes);
+        inserir(&arvore, valor);
     }
 
     fclose(arquivo);
@@ -144,7 +144,7 @@ tipo_no* busca_arv(tipo_no* raiz, int chave, int *comparacoes) {
 
 int alturaRB(tipo_no* no) {
     if (no == NULL)
-        return 0;
+        return -1;
     else {
         int alturaesq = alturaRB(no->esq);
         int alturadir = alturaRB(no->dir);
@@ -168,10 +168,14 @@ void liberarArvoreRB(tipo_no *raiz) {
     }
 }
 
-void imprime(tipo_no*raiz) {
+void imprime(tipo_no* raiz) {
     if (raiz != NULL) {
         imprime(raiz->esq);
         printf("%d (%s) ", raiz->chave, raiz->cor == VERMELHO ? "Vermelho" : "Preto");
         imprime(raiz->dir);
     }
+}
+
+int obter_contador_rotacoes() {
+    return contador_rotacoes;
 }
